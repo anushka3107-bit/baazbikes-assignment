@@ -9,20 +9,28 @@ const Table = () => {
   const fetchData = async (url) => {
     try {
       const response = await fetch(url);
-
+  
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
-      const data = await response.json();
-
-      setDetails(data);
-
-      console.log(data);
+  
+      const responseBody = await response.json();
+  
+      const parsedData = JSON.parse(responseBody.body);
+  
+      if (Array.isArray(parsedData)) {
+        setDetails(parsedData);
+      } else {
+        console.error("API did not return an array:", parsedData);
+        setDetails([]);
+      }
+  
+      console.log(parsedData);
     } catch (e) {
       console.error(e);
     }
   };
+  
 
   useEffect(() => {
     fetchData(API);
