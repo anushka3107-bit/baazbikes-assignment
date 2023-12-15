@@ -2,7 +2,8 @@ import React from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const Pagination = ({ postsPerPage, totalPosts, currPage, paginate }) => {
-  const pageNumbers = [];
+  
+    const pageNumbers = [];
 
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);

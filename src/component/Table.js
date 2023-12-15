@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
 import BikeDetails from "./BikeDetails";
-import SearchBar from "./SearchBar";
 import Pagination from "./Pagination";
+import SearchBar from "./SearchBar";
 
 const API = "https://dev.electorq.com/dummy/battery";
 
 const Table = () => {
   const [details, setDetails] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // const [loading, setLoading] = useState(false);
+  const [setSearchTerm] = useState("");
+  const [filteredDetails, setFilteredDetails] = useState([]);
   const [currPage, setCurrPage] = useState(1);
-
-  const [postsPerPage] = useState(5);
-
-  const [currDetails, setCurrDetails] = useState([]);
+  const [postsPerPage] = useState(10);
+  const [currPageDetails, setCurrPageDetails] = useState([]);
 
   const fetchData = async (url) => {
     try {
@@ -25,47 +22,49 @@ const Table = () => {
       }
 
       const responseBody = await response.json();
-
       const parsedData = JSON.parse(responseBody.body);
 
       if (Array.isArray(parsedData)) {
         setDetails(parsedData);
+        setFilteredDetails(parsedData); // Initialize filteredDetails with all details
       } else {
         console.error("API did not return an array:", parsedData);
         setDetails([]);
+        setFilteredDetails([]);
       }
-
-      console.log(parsedData);
     } catch (e) {
       console.error(e);
     }
   };
+
+  // Handle search term change
   const handleSearch = (term) => {
     setSearchTerm(term);
+    const filteredData = details.filter((detail) =>
+      detail.id.toString().includes(term)
+    );
+    setFilteredDetails(filteredData); // Update filtered data based on search term
+    setCurrPage(1); // Reset current page to 1 when the search term changes
   };
 
   useEffect(() => {
     fetchData(API);
   }, []);
 
-  const filteredDetails = details.filter((detail) =>
-    detail.id.toString().includes(searchTerm)
-  );
-
-  // get curr details
+  // Update current page details when pagination changes
   useEffect(() => {
     const indexOfLastPost = currPage * postsPerPage;
-
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    setCurrPageDetails(
+      filteredDetails.slice(indexOfFirstPost, indexOfLastPost)
+    );
+  }, [filteredDetails, currPage, postsPerPage]);
 
-    setCurrDetails(details.slice(indexOfFirstPost, indexOfLastPost));
-  }, [details, currPage, postsPerPage]);
-
-  // change page
+  // Handle pagination change
   const paginate = (pageNumber) => setCurrPage(pageNumber);
 
   return (
-    <div className="table-container">
+    <div>
       <SearchBar onSearch={handleSearch} />
       <table>
         <thead>
@@ -77,14 +76,13 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          <BikeDetails details={filteredDetails} />
+          <BikeDetails details={currPageDetails} />
         </tbody>
       </table>
       {/* Pagination */}
-
       <Pagination
         postsPerPage={postsPerPage}
-        totalPosts={details.length}
+        totalPosts={filteredDetails.length}
         paginate={paginate}
         currPage={currPage}
       />
