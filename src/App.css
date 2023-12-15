@@ -104,4 +104,48 @@
     font-size: 1.4rem;
   }
 
-  
+/* pagination */
+
+.paginationContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1E1E1E;
+  border-radius: 10px;
+  margin: 10px 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.paginationContainer li{
+  list-style: none;
+  padding-left: 20px;
+
+}
+
+.pageLink{
+  text-decoration: none;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.pageLink:hover{
+  border-radius: 50%;
+  background-color: #555;
+  transition: all 0.1s ease;
+  padding: 12px;
+}
+
+
+.icon {
+  display: inline-block;
+  cursor: pointer;
+  margin-left:20px;
+  font-size: 20px; 
+  color: #333;
+}
+
+.icon:hover{
+  color: #555;
+}
