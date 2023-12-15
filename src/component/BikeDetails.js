@@ -11,16 +11,22 @@ const BikeDetails = ({ details }) => {
 
   return (
     <>
-      {details.map((detail) => {
-        return (
-          <tr key={detail.id}>
-            <td>{detail.id}</td>
-            <td>{detail.soc}</td>
-            <td>{detail.imei}</td>
-            <td>{detail.owner}</td>
-          </tr>
-        );
-      })}
+      {details
+        .sort((a, b) => a.id - b.id)
+        .map((detail) => {
+          const rowStyle = {
+            background: detail.id % 2 === 0 ? "#252526" : "#2D2D30",
+          };
+
+          return (
+            <tr key={detail.id} style={rowStyle}>
+              <td>{detail.id}</td>
+              <td>{detail.soc}</td>
+              <td>{detail.imei}</td>
+              <td>{detail.owner}</td>
+            </tr>
+          );
+        })}
     </>
   );
 };

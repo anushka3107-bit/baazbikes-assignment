@@ -5,7 +5,6 @@ import SearchBar from "./component/SearchBar";
 const App = () => {
   return (
     <div>
-      <SearchBar />
       <Table />
     </div>
   );

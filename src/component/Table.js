@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import BikeDetails from "./BikeDetails";
+import SearchBar from "./SearchBar";
 import Pagination from "./Pagination";
 
 const API = "https://dev.electorq.com/dummy/battery";
 
 const Table = () => {
   const [details, setDetails] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
   // const [loading, setLoading] = useState(false);
   const [currPage, setCurrPage] = useState(1);
 
-  const [postsPerPage] = useState(10);
+  const [postsPerPage] = useState(5);
 
   const [currDetails, setCurrDetails] = useState([]);
 
   const fetchData = async (url) => {
     try {
-      // setLoading(true);
       const response = await fetch(url);
 
       if (!response.ok) {
@@ -28,11 +30,9 @@ const Table = () => {
 
       if (Array.isArray(parsedData)) {
         setDetails(parsedData);
-        // setLoading(false);
       } else {
         console.error("API did not return an array:", parsedData);
         setDetails([]);
-        // setLoading(true);
       }
 
       console.log(parsedData);
@@ -40,10 +40,17 @@ const Table = () => {
       console.error(e);
     }
   };
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
 
   useEffect(() => {
     fetchData(API);
   }, []);
+
+  const filteredDetails = details.filter((detail) =>
+    detail.id.toString().includes(searchTerm)
+  );
 
   // get curr details
   useEffect(() => {
@@ -58,7 +65,8 @@ const Table = () => {
   const paginate = (pageNumber) => setCurrPage(pageNumber);
 
   return (
-    <div>
+    <div className="table-container">
+      <SearchBar onSearch={handleSearch} />
       <table>
         <thead>
           <tr>
@@ -69,7 +77,7 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-          <BikeDetails details={currDetails} />
+          <BikeDetails details={filteredDetails} />
         </tbody>
       </table>
       {/* Pagination */}
