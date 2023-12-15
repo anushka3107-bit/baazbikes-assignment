@@ -1,25 +1,28 @@
-import React from 'react'
+import React from "react";
 
-const BikeDetails = ({details}) => {
+const BikeDetails = ({ details }) => {
+  if (!Array.isArray(details)) {
+    return (
+      <tr>
+        <td colSpan="4">Invalid data</td>
+      </tr>
+    );
+  }
+
   return (
     <>
-    {
-        details.map((detail)=>{
-            const {id, imei , owner, soc} = detail;
-
-            return(
-                <tr>
-                    <td>{id}</td>
-                    <td>{imei}</td>
-                    <td>{owner}</td>
-                    <td>{soc}</td>
-                </tr>
-            )
-        })
-    }
-
+      {details.map((detail) => {
+        return (
+          <tr key={detail.id}>
+            <td>{detail.id}</td>
+            <td>{detail.soc}</td>
+            <td>{detail.imei}</td>
+            <td>{detail.owner}</td>
+          </tr>
+        );
+      })}
     </>
-  )
-}
+  );
+};
 
-export default BikeDetails
+export default BikeDetails;

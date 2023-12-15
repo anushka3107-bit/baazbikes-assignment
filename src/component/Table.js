@@ -15,9 +15,9 @@ const Table = () => {
       }
 
       const data = await response.json();
-      if (data.length > 0) {
-        setDetails(data);
-      }
+
+      setDetails(data);
+
       console.log(data);
     } catch (e) {
       console.error(e);
